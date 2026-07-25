@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>何俊伟 - 个人主页</title>
+    <style>
+        /* ================= 基础重置与变量 ================= */
+        :root {
+            --primary: #2563EB;
+            --primary-light: #60A5FA;
+            --bg-color: #F8FAFC;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-dark: #1E293B;
+            --text-gray: #475569;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(37, 99, 235, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            /* 科技感点阵背景 */
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* ================= 顶部导航栏 (毛玻璃) ================= */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        /* 导航栏下划线悬浮动画 */
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ================= 通用区块布局 ================= */
+        section {
+            padding: 120px 5% 60px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 3.5rem;
+            font-weight: 800;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        /* ================= 滚动淡入动画类 ================= */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ================= Hero 区域 (无头像版) ================= */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .hero-name {
+            font-size: 4rem; /* 没有头像，名字稍微放大一些，增加视觉冲击力 */
+            font-weight: 900;
+            margin-bottom: 1.2rem;
+            color: var(--text-dark);
+            letter-spacing: 3px;
+        }
+
+        .hero-intro {
+            font-size: 1.35rem;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        /* ================= 项目展示区 ================= */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+
+        .project-title {
+            font-size: 1.35rem;
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            font-weight: 700;
+        }
+
+        .project-desc {
+            color: var(--text-gray);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        /* ================= 关于我区域 ================= */
+        #about {
+            margin-bottom: 40px;
+        }
+
+        .about-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: var(--shadow-sm);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            backdrop-filter: blur(10px);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .about-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        @media (max-width: 768px) {
+            .about-card {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 30px;
+            }
+        }
+
+        .about-section {
+            margin-bottom: 30px;
+        }
+
+        .about-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-section h3 {
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .skill-tag {
+            background-color: #EFF6FF;
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #DBEAFE;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .skill-tag:hover {
+            background-color: var(--primary);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+        }
+
+        /* 联系方式列表 */
+        .contact-list {
+            list-style: none;
+            color: var(--text-gray);
+        }
+
+        .contact-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+
+        .contact-list a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .contact-list a:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
+        }
+
+        /* ================= 底部版权 ================= */
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            color: #94A3B8;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <nav>
+        <a href="#home" class="nav-logo">何俊伟</a>
+        <div class="nav-links">
+            <a href="#home">首页</a>
+            <a href="#projects">项目</a>
+            <a href="#about">关于我</a>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section id="home">
+        <h1 class="hero-name fade-up">何俊伟</h1>
+        <p class="hero-intro fade-up" style="transition-delay: 0.1s;">物联网工程 · 嵌入式开发 · Python开发 · 热爱创造</p>
+    </section>
+
+    <!-- 项目展示区 -->
+    <section id="projects">
+        <h2 class="section-title fade-up">项目经历</h2>
+        <div class="projects-grid">
+            <!-- 项目卡片 1 -->
+            <div class="project-card fade-up">
+                <h3 class="project-title">基于STM32的六自由度机械臂开发</h3>
+                <p class="project-desc">基于STM32的下位机舵机驱动，结合Linux服务器端的本地目标检测模型与Qt上位机，利用TCP/HTTP协议完成从图像识别到机械臂精准运动的完整闭环控制。</p>
+            </div>
+
+            <!-- 项目卡片 2 -->
+            <div class="project-card fade-up" style="transition-delay: 0.2s;">
+                <h3 class="project-title">谷物仓库门禁安防系统</h3>
+                <p class="project-desc">集成人脸识别双因素认证、DHT11温湿度监测、MQ-2烟雾报警及无线通信的STM32门禁系统。支持超限报警并配合PC端Qt软件实现远程监控与控制。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我区域 -->
+    <section id="about">
+        <h2 class="section-title fade-up">关于我</h2>
+        <div class="about-card fade-up">
+            <!-- 左列 -->
+            <div>
+                <div class="about-section">
+                    <h3>&#127891; 教育背景</h3>
+                    <p style="color: var(--text-gray);"><strong>四川轻化工大学</strong> <br> 物联网工程 (本科) | 2022.09 - 2026.06</p>
+                </div>
+
+                <div class="about-section">
+                    <h3>&#128187; 技术能力</h3>
+                    <div class="skills-tags">
+                        <span class="skill-tag">C / C++</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">OpenCV</span>
+                        <span class="skill-tag">NumPy</span>
+                        <span class="skill-tag">STM32 / 嵌入式开发</span>
+                        <span class="skill-tag">UART/I2C/SPI/CAN</span>
+                        <span class="skill-tag">Qt GUI 开发</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右列 -->
+            <div>
+                <div class="about-section">
+                    <h3>&#128231; 联系方式</h3>
+                    <ul class="contact-list">
+                        <li><strong>&#9993;&#65039; 邮箱：</strong> &nbsp;<a href="mailto:3411443886@qq.com">3411443886@qq.com</a></li>
+                        <li><strong>&#128222; 电话：</strong> &nbsp;<a href="tel:13778049529">13778049529</a></li>
+                        <li><strong>&#128205; 坐标：</strong> &nbsp;四川绵阳</li>
+                    </ul>
+                </div>
+
+                <div class="about-section">
+                    <h3>&#128172; 自我评价</h3>
+                    <p style="color: var(--text-gray); text-align: justify;">本人专业基础扎实，实践经验丰富，熟练掌握 C、C++及 Python 开发，具备独立完成前后端与嵌入式项目的能力。具有人工智能训练师四级证书，学习能力强，善于快速掌握新技术，逻辑思维缜密，致力于在技术领域持续深耕创造价值。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部版权信息 -->
+    <footer>
+        &copy; 2026 何俊伟
+    </footer>
+
+    <!-- 内嵌 JavaScript -->
+    <script>
+        // 1. 确保点击导航栏能够平滑滚动
+        document.querySelectorAll('.nav-links a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 2. 页面元素滚动淡入动画 (Intersection Observer)
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15 // 元素出现15%时触发动画
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // 动画只执行一次
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-up').forEach((element) => {
+            observer.observe(element);
+        });
+
+        // 3. 控制台友好问候
+        console.log("%c欢迎访问 何俊伟 的个人网站！🚀", "color: #2563EB; font-size: 16px; font-weight: bold;");
+    </script>
+</body>
+</html>
